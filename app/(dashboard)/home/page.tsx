@@ -51,7 +51,7 @@ export default function HomePage() {
   const fetchBoards = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:5273/api/v1/boards?orgId=1`);
+      const res = await fetch(`https://localhost:5274/api/v1/boards?orgId=1`);
       if (!res.ok) {
         throw new Error("Failed to fetch boards");
       }
@@ -73,7 +73,7 @@ export default function HomePage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5273/api/v1/boards", {
+      const res = await fetch("https://localhost:5274/api/v1/boards", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orgId: "1", title: newBoardTitle }),
@@ -108,7 +108,7 @@ export default function HomePage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5273/api/v1/boards/${selectedBoardId}`,
+        `https://localhost:5274/api/v1/boards/${selectedBoardId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -141,7 +141,7 @@ export default function HomePage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5273/api/v1/boards/${deleteBoardId}`,
+        `https://localhost:5274/api/v1/boards/${deleteBoardId}`,
         {
           method: "DELETE",
         }
