@@ -96,7 +96,7 @@ export default function BoardPage() {
 
   async function fetchBoardDetail() {
     try {
-      const res = await fetch(`http://localhost:5273/api/v1/boards/${boardId}`);
+      const res = await fetch(`https://localhost:5274/api/v1/boards/${boardId}`);
       if (!res.ok) throw new Error("Failed to fetch board details");
       const data = await res.json();
       setBoardDetail(data);
@@ -112,7 +112,7 @@ export default function BoardPage() {
       setError("");
       // Endpoint: GET /api/v1/boards/{boardId}/lists
       const res = await fetch(
-        `http://localhost:5273/api/v1/boards/${boardId}/lists`
+        `https://localhost:5274/api/v1/boards/${boardId}/lists`
       );
       if (!res.ok) {
         throw new Error("Failed to fetch lists");
@@ -142,7 +142,7 @@ export default function BoardPage() {
     try {
       // Endpoint: POST /api/v1/boards/{boardId}/lists
       const res = await fetch(
-        `http://localhost:5273/api/v1/boards/${boardId}/lists`,
+        `https://localhost:5274/api/v1/boards/${boardId}/lists`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -179,7 +179,7 @@ export default function BoardPage() {
     try {
       // Endpoint: PUT /api/v1/lists/{listId}
       const res = await fetch(
-        `http://localhost:5273/api/v1/lists/${selectedListId}`,
+        `https://localhost:5274/api/v1/lists/${selectedListId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -209,7 +209,7 @@ export default function BoardPage() {
     try {
       // Endpoint: DELETE /api/v1/lists/{listId}
       const res = await fetch(
-        `http://localhost:5273/api/v1/lists/${deleteListId}`,
+        `https://localhost:5274/api/v1/lists/${deleteListId}`,
         {
           method: "DELETE",
         }
@@ -238,21 +238,22 @@ export default function BoardPage() {
       return;
     }
     try {
+      console.log("List ID being used:", addCardListId); // ✅ Check the listId
       // Endpoint: POST /api/v1/lists/{listId}/cards
-      const res = await fetch(
-        `http://localhost:5273/api/v1/lists/${addCardListId}/cards`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            listId: selectedListId,
-            title: newCardTitle,
-            order: newCardOrder,
-            description: newCardDesc,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error("Failed to add card");
+      const res = await fetch(`https://localhost:5274/api/v1/lists/${addCardListId}/cards`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newCardTitle,
+          description: newCardDesc,
+          // NOTE: Do NOT include listId in body if it's coming from route param
+        }),
+      });
+      if (!res.ok) {
+        const errorBody = await res.text();
+        console.error("API Error:", errorBody);
+        throw new Error("Failed to add card");
+      }
       setShowAddCardModal(false);
       await fetchLists();
     } catch (err: any) {
@@ -277,7 +278,7 @@ export default function BoardPage() {
     try {
       // Endpoint: PUT /api/v1/cards/{cardId}
       const res = await fetch(
-        `http://localhost:5273/api/v1/cards/${updateCardId}`,
+        `https://localhost:5274/api/v1/cards/${updateCardId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -308,7 +309,7 @@ export default function BoardPage() {
     try {
       // Endpoint: DELETE /api/v1/cards/{cardId}
       const res = await fetch(
-        `http://localhost:5273/api/v1/cards/${deleteCardId}`,
+        `https://localhost:5274/api/v1/cards/${deleteCardId}`,
         {
           method: "DELETE",
         }

@@ -34,7 +34,7 @@ export function CardList({
     try {
       setLoading(true);
       const res = await fetch(
-        `http://localhost:5273/api/v1/lists/${listId}/cards`
+        `https://localhost:5274/api/v1/lists/${listId}/cards`
       );
       if (!res.ok) throw new Error("Failed to fetch cards");
       const data = await res.json();
