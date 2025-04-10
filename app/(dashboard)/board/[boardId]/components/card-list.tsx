@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Pencil, Trash2, MoreHorizontal, Clock, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -27,10 +27,28 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     fetchCards()
   }, [listId])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setActiveCardId(null); // closes the dropdown
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   async function fetchCards() {
     try {
@@ -127,11 +145,12 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
                 <AnimatePresence>
                   {activeCardId === card.cardId && (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.1 }}
-                      className="absolute right-0 top-8 z-10 min-w-[120px] rounded-lg border border-gray-100 bg-white py-1 shadow-lg"
+                    ref={menuRef}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.1 }}
+                    className="absolute right-0 top-8 z-10 min-w-[120px] rounded-lg border border-gray-100 bg-white py-1 shadow-lg"
                     >
                       <button
                         className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700"

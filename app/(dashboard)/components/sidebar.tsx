@@ -24,17 +24,12 @@ export const SidebarDashboard = () => {
     {
       title: "Home",
       icon: Home,
-      href: "/dashboard",
+      href: "/home",
     },
     {
       title: "Overview",
       icon: LayoutDashboard,
       href: "/dashboard/overview",
-    },
-    {
-      title: "Projects",
-      icon: FolderKanban,
-      href: "/dashboard/projects",
     },
     {
       title: "Calendar",
@@ -45,11 +40,6 @@ export const SidebarDashboard = () => {
       title: "Team",
       icon: Users,
       href: "/dashboard/team",
-    },
-    {
-      title: "Analytics",
-      icon: BarChart3,
-      href: "/dashboard/analytics",
     },
   ]
 

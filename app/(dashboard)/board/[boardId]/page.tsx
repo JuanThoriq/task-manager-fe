@@ -159,6 +159,8 @@ export default function BoardPage() {
   const [newListTitle, setNewListTitle] = useState("")
   const [newListOrder, setNewListOrder] = useState<number>(0)
   const [isAddingList, setIsAddingList] = useState(false)
+  const [openMenuListId, setOpenMenuListId] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   // State for Update List modal
   const [showUpdateListModal, setShowUpdateListModal] = useState(false)
@@ -193,6 +195,28 @@ export default function BoardPage() {
   const [deleteCardId, setDeleteCardId] = useState("")
   const [isDeletingCard, setIsDeletingCard] = useState(false)
 
+  const toggleMenu = (listId: string) => {
+    setOpenMenuListId((prev) => (prev === listId ? null : listId));
+  };
+  
+  const closeMenu = () => setOpenMenuListId(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setOpenMenuListId(null);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  
   // Fetch Lists & Cards
   useEffect(() => {
     if (!boardId) return
@@ -518,29 +542,52 @@ export default function BoardPage() {
                   <div className="w-2 h-2 rounded-full bg-violet-500"></div>
                   <h2 className="font-semibold text-gray-800">{list.title}</h2>
                 </div>
-                {/* <div className="relative">
-                    <Button variant="ghost" size="sm" className="h-7 w-7 rounded-full p-0">
-                      <MoreHorizontal className="h-4 w-4 text-gray-500" />
-                    </Button>
-                  <div className="absolute right-0 top-full mt-1 hidden group-hover:block">
-                    <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-1 w-32">
-                      <button
-                        className="flex w-full items-center px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => openUpdateListModal(list)}
+                <div className="relative">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 rounded-full p-0"
+                    onClick={() => toggleMenu(list.listId)}
+                  >
+                    <MoreHorizontal className="h-4 w-4 text-gray-500" />
+                  </Button>
+
+                  <AnimatePresence>
+                    {openMenuListId === list.listId && (
+                      <motion.div
+                        ref={menuRef}
+                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-full mt-1 z-10"
                       >
-                        <Pencil className="h-3.5 w-3.5 mr-2" />
-                        Edit List
-                      </button>
-                      <button
-                        className="flex w-full items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
-                        onClick={() => openDeleteListModal(list.listId)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5 mr-2" />
-                        Delete List
-                      </button>
-                    </div>
-                  </div>
-                </div> */}
+                        <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-1 w-32">
+                          <button
+                            className="flex w-full items-center px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => {
+                              openUpdateListModal(list);
+                              closeMenu();
+                            }}
+                          >
+                            <Pencil className="h-3.5 w-3.5 mr-2" />
+                            Edit List
+                          </button>
+                          <button
+                            className="flex w-full items-center px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+                            onClick={() => {
+                              openDeleteListModal(list.listId);
+                              closeMenu();
+                            }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5 mr-2" />
+                            Delete List
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               <div className="flex-1 bg-gray-50/50 rounded-b-lg border-x border-b border-gray-200 p-3">

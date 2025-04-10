@@ -40,11 +40,6 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       href: "/dashboard/overview",
     },
     {
-      title: "Projects",
-      icon: FolderKanban,
-      href: "/dashboard/projects",
-    },
-    {
       title: "Calendar",
       icon: Calendar,
       href: "/dashboard/calendar",
@@ -53,11 +48,6 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       title: "Team",
       icon: Users,
       href: "/dashboard/team",
-    },
-    {
-      title: "Analytics",
-      icon: BarChart3,
-      href: "/dashboard/analytics",
     },
   ]
 

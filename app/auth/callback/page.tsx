@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 
 // ⛔ SSR OFF
 const AnimatedLoader = dynamic(() => import("@/components/animatedLoader"), {
-  ssr: true,
+  ssr: false,
 });
 
 export default function AuthCallbackPage() {
