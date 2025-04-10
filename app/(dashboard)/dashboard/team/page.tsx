@@ -1,43 +1,30 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Users, Github, Linkedin, Mail, Twitter } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion";
+import { Users, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface TeamMember {
-  id: number
-  name: string
-  role: string
-  bio: string
-  avatar: string
+  id: number;
+  name: string;
+  role: string;
+  bio: string;
+  avatar: string;
   social: {
-    github?: string
-    linkedin?: string
-    twitter?: string
-    email?: string
-  }
+    github?: string;
+    linkedin?: string;
+    twitter?: string;
+    email?: string;
+  };
 }
 
 export default function TeamPage() {
   const teamMembers: TeamMember[] = [
     {
       id: 1,
-      name: "Nelsen",
-      role: "Slave",
+      name: "Juan Thoriq Pahlevi",
+      role: "Full Stack Developer",
       bio: "Passionate about creating intuitive user experiences and scalable applications.",
-      avatar: "/placeholder.svg?height=400&width=400",
-      social: {
-        github: "#",
-        linkedin: "#",
-        twitter: "#",
-        email: "nelsen@example.com",
-      },
-    },
-    {
-      id: 2,
-      name: "Juan",
-      role: "Lead Developer",
-      bio: "Focused on creating beautiful interfaces that balance form and function.",
       avatar: "/placeholder.svg?height=400&width=400",
       social: {
         github: "#",
@@ -46,7 +33,20 @@ export default function TeamPage() {
         email: "juan@example.com",
       },
     },
-  ]
+    {
+      id: 2,
+      name: "Nelsen",
+      role: "Full Stack Developer",
+      bio: "Focused on creating beautiful interfaces that balance form and function.",
+      avatar: "/placeholder.svg?height=400&width=400",
+      social: {
+        github: "#",
+        linkedin: "#",
+        twitter: "#",
+        email: "nelsen@example.com",
+      },
+    },
+  ];
 
   return (
     <div className="p-6 pt-20 md:pt-24 max-w-7xl mx-auto">
@@ -60,8 +60,8 @@ export default function TeamPage() {
           Our Team
         </h1>
         <p className="text-gray-500 max-w-2xl mx-auto">
-          Meet the talented individuals behind our success. Our small but mighty team is dedicated to delivering
-          exceptional results.
+          Meet the talented individuals behind our success. Our small but mighty
+          team is dedicated to delivering exceptional results.
         </p>
       </motion.div>
 
@@ -92,8 +92,12 @@ export default function TeamPage() {
 
               <div className="p-6 md:w-2/3 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 mb-1">{member.name}</h2>
-                  <p className="text-violet-600 font-medium mb-4">{member.role}</p>
+                  <h2 className="text-2xl font-bold text-gray-800 mb-1">
+                    {member.name}
+                  </h2>
+                  <p className="text-violet-600 font-medium mb-4">
+                    {member.role}
+                  </p>
                   <p className="text-gray-600 mb-6">{member.bio}</p>
                 </div>
 
@@ -152,13 +156,13 @@ export default function TeamPage() {
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-3">Join Our Team</h2>
         <p className="text-gray-500 max-w-2xl mx-auto mb-6">
-          We're always looking for talented individuals to join our team. If you're passionate about what we do, we'd
-          love to hear from you.
+          We're always looking for talented individuals to join our team. If
+          you're passionate about what we do, we'd love to hear from you.
         </p>
         <Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white px-6">
           View Open Positions
         </Button>
       </motion.div>
     </div>
-  )
+  );
 }
