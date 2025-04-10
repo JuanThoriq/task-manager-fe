@@ -5,6 +5,7 @@ body,
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  height: 100%;
 }
 
 @theme inline {
