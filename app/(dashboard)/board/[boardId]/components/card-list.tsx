@@ -1,104 +1,166 @@
-import React, { useEffect, useState } from "react";
+"use client"
+
+import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Pencil, Trash2, MoreHorizontal, Clock, AlertCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { format } from "date-fns"
 
 interface Card {
-  cardId: string;
-  title: string;
-  order: number;
-  description?: string;
-  listId: string;
-  createdAt: string;
-  updatedAt: string;
+  cardId: string
+  title: string
+  order: number
+  description?: string
+  listId: string
+  createdAt: string
+  updatedAt: string
 }
 
 interface CardListProps {
-  listId: string;
-  // Opsional: Callback untuk membuka modal update atau delete dari komponen induk
-  onOpenUpdateCard?: (card: Card) => void;
-  onOpenDeleteCard?: (cardId: string) => void;
+  listId: string
+  onOpenUpdateCard?: (card: Card) => void
+  onOpenDeleteCard?: (cardId: string) => void
 }
 
-export function CardList({
-  listId,
-  onOpenUpdateCard,
-  onOpenDeleteCard,
-}: CardListProps) {
-  const [cards, setCards] = useState<Card[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardListProps) {
+  const [cards, setCards] = useState<Card[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [activeCardId, setActiveCardId] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchCards();
-  }, [listId]);
+    fetchCards()
+  }, [listId])
 
   async function fetchCards() {
     try {
-      setLoading(true);
-      const res = await fetch(
-        `https://localhost:5274/api/v1/lists/${listId}/cards`
-      );
-      if (!res.ok) throw new Error("Failed to fetch cards");
-      const data = await res.json();
-      setCards(data);
-      setLoading(false);
+      setLoading(true)
+      const res = await fetch(`https://localhost:5274/api/v1/lists/${listId}/cards`)
+      if (!res.ok) throw new Error("Failed to fetch cards")
+      const data = await res.json()
+      setCards(data)
+      setLoading(false)
     } catch (err: any) {
-      console.error(err);
-      setError("Error fetching cards");
-      setLoading(false);
+      console.error(err)
+      setError("Error fetching cards")
+      setLoading(false)
     }
   }
 
-  // Jika tidak menggunakan callback dari parent, Anda bisa menghandle modal update/delete di sini.
-  // Contoh fungsi untuk membuka modal update/delete (bisa disesuaikan dengan state modal masing-masing)
   const handleOpenUpdate = (card: Card) => {
     if (onOpenUpdateCard) {
-      onOpenUpdateCard(card);
-    } else {
-      // Jika modal dikelola lokal di CardList, simpan state dan tampilkan modal update.
-      console.log("Open update modal for card:", card);
+      onOpenUpdateCard(card)
     }
-  };
+  }
 
   const handleOpenDelete = (cardId: string) => {
     if (onOpenDeleteCard) {
-      onOpenDeleteCard(cardId);
-    } else {
-      // Jika modal dikelola lokal di CardList, simpan state dan tampilkan modal delete.
-      console.log("Open delete modal for card:", cardId);
+      onOpenDeleteCard(cardId)
     }
-  };
+  }
+
+  const toggleCardMenu = (cardId: string) => {
+    setActiveCardId(activeCardId === cardId ? null : cardId)
+  }
 
   if (loading)
-    return <div className="text-sm text-gray-500">Loading cards...</div>;
-  if (error) return <div className="text-sm text-red-500">{error}</div>;
+    return (
+      <div className="py-6 text-center">
+        <div className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-violet-400 border-t-transparent"></div>
+        <p className="mt-2 text-sm text-gray-500">Loading cards...</p>
+      </div>
+    )
+
+  if (error)
+    return (
+      <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 flex items-center gap-2">
+        <AlertCircle className="h-4 w-4" />
+        {error}
+      </div>
+    )
+
+  if (cards.length === 0) {
+    return (
+      <div className="py-6 text-center rounded-lg border border-dashed border-gray-200 bg-gray-50">
+        <p className="text-sm text-gray-500">No cards yet</p>
+        <p className="text-xs text-gray-400 mt-1">Click "Add Card" to create one</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-2">
-      {cards.map((card) => (
-        <div
-          key={card.cardId}
-          className="border rounded p-2 relative wrap-break-word"
-        >
-          <p className="font-semibold">{card.title}</p>
-          <p className="text-sm text-gray-600 whitespace-pre-wrap">
-            {card.description || "No description"}
-          </p>
-          <div className="absolute top-2 right-2 flex space-x-2 text-xs">
-            <button
-              className="text-gray-500 hover:text-gray-700"
-              onClick={() => handleOpenUpdate(card)}
-            >
-              Update
-            </button>
-            <button
-              className="text-red-500 hover:text-red-700"
-              onClick={() => handleOpenDelete(card.cardId)}
-            >
-              Delete
-            </button>
-          </div>
-          {/* Anda bisa menambahkan tombol update/delete untuk card di sini */}
-        </div>
-      ))}
+    <div className="space-y-3">
+      <AnimatePresence>
+        {cards.map((card, index) => (
+          <motion.div
+            key={card.cardId}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, delay: index * 0.05 }}
+            whileHover={{ y: -2 }}
+            className="group relative rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <div className="mb-2">
+              <h3 className="font-medium text-gray-800">{card.title}</h3>
+              {card.description && (
+                <p className="mt-1 text-sm text-gray-600 line-clamp-2 whitespace-pre-wrap">{card.description}</p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                <span>{format(new Date(card.updatedAt), "MMM d")}</span>
+              </div>
+
+              <div className="relative">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => toggleCardMenu(card.cardId)}
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+
+                <AnimatePresence>
+                  {activeCardId === card.cardId && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.1 }}
+                      className="absolute right-0 top-8 z-10 min-w-[120px] rounded-lg border border-gray-100 bg-white py-1 shadow-lg"
+                    >
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700"
+                        onClick={() => {
+                          handleOpenUpdate(card)
+                          setActiveCardId(null)
+                        }}
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </button>
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-red-600 hover:bg-red-50"
+                        onClick={() => {
+                          handleOpenDelete(card.cardId)
+                          setActiveCardId(null)
+                        }}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Delete
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
-  );
+  )
 }
