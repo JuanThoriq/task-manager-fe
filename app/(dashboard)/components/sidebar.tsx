@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Home,
   LayoutDashboard,
@@ -13,12 +13,12 @@ import {
   FolderKanban,
   BarChart3,
   HelpCircle,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const SidebarDashboard = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const menuItems = [
     {
@@ -41,7 +41,7 @@ export const SidebarDashboard = () => {
       icon: Users,
       href: "/dashboard/team",
     },
-  ]
+  ];
 
   // const bottomMenuItems = [
   //   {
@@ -57,7 +57,7 @@ export const SidebarDashboard = () => {
   // ]
 
   return (
-    <aside className="hidden md:flex h-screen w-64 flex-col border-r border-gray-100 bg-white pt-16">
+    <aside className="hidden md:flex w-64 flex-col border-r border-gray-100 bg-white pt-16">
       <div className="flex flex-1 flex-col gap-2 p-4 overflow-auto">
         {/* <div className="mb-6">
           <Button className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 py-5">
@@ -68,7 +68,7 @@ export const SidebarDashboard = () => {
 
         <nav className="space-y-1">
           {menuItems.map((item) => {
-            const isActive = pathname === item.href
+            const isActive = pathname === item.href;
 
             return (
               <Link key={item.href} href={item.href}>
@@ -77,10 +77,17 @@ export const SidebarDashboard = () => {
                   whileTap={{ scale: 0.98 }}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
-                    isActive ? "bg-violet-50 text-violet-700" : "text-gray-600 hover:bg-gray-50 hover:text-violet-600",
+                    isActive
+                      ? "bg-violet-50 text-violet-700"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-violet-600"
                   )}
                 >
-                  <item.icon className={cn("h-5 w-5", isActive ? "text-violet-600" : "text-gray-400")} />
+                  <item.icon
+                    className={cn(
+                      "h-5 w-5",
+                      isActive ? "text-violet-600" : "text-gray-400"
+                    )}
+                  />
                   {item.title}
 
                   {isActive && (
@@ -94,7 +101,7 @@ export const SidebarDashboard = () => {
                   )}
                 </motion.div>
               </Link>
-            )
+            );
           })}
         </nav>
 
@@ -136,5 +143,5 @@ export const SidebarDashboard = () => {
         </div>
       </div>
     </aside>
-  )
-}
+  );
+};
