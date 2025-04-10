@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Pencil, Trash2, MoreHorizontal, Clock, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 interface Card {
   cardId: string
@@ -28,6 +29,7 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
   const [error, setError] = useState("")
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 })
 
   useEffect(() => {
     fetchCards()
@@ -77,9 +79,10 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
     }
   }
 
-  const toggleCardMenu = (cardId: string) => {
-    setActiveCardId(activeCardId === cardId ? null : cardId)
-  }
+  const toggleCardMenu = (cardId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // prevents clicks from bubbling
+    setActiveCardId(prev => (prev === cardId ? null : cardId));
+  };
 
   if (loading)
     return (
@@ -117,7 +120,7 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2, delay: index * 0.05 }}
             whileHover={{ y: -2 }}
-            className="group relative rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:shadow-md transition-all duration-200"
+            className="group relative overflow-visible z-0 rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:shadow-md transition-all duration-200"
           >
             <div className="mb-2">
               <h3 className="font-medium text-gray-800">{card.title}</h3>
@@ -133,49 +136,49 @@ export function CardList({ listId, onOpenUpdateCard, onOpenDeleteCard }: CardLis
               </div>
 
               <div className="relative">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => toggleCardMenu(card.cardId)}
-                >
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => toggleCardMenu(card.cardId, e)}
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
 
-                <AnimatePresence>
-                  {activeCardId === card.cardId && (
-                    <motion.div
+              <AnimatePresence>
+                {activeCardId === card.cardId && (
+                  <motion.div
                     ref={menuRef}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.1 }}
-                    className="absolute right-0 top-8 z-10 min-w-[120px] rounded-lg border border-gray-100 bg-white py-1 shadow-lg"
+                    className="absolute right-0 bottom-8 z-50 min-w-[120px] rounded-lg border border-gray-100 bg-white py-1 shadow-lg"
+                  >
+                    <button
+                      className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700"
+                      onClick={() => {
+                        handleOpenUpdate(card)
+                        setActiveCardId(null)
+                      }}
                     >
-                      <button
-                        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700"
-                        onClick={() => {
-                          handleOpenUpdate(card)
-                          setActiveCardId(null)
-                        }}
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                        Edit
-                      </button>
-                      <button
-                        className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-red-600 hover:bg-red-50"
-                        onClick={() => {
-                          handleOpenDelete(card.cardId)
-                          setActiveCardId(null)
-                        }}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        Delete
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      <Pencil className="h-3.5 w-3.5" />
+                      Edit
+                    </button>
+                    <button
+                      className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-red-600 hover:bg-red-50"
+                      onClick={() => {
+                        handleOpenDelete(card.cardId)
+                        setActiveCardId(null)
+                      }}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Delete
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             </div>
           </motion.div>
         ))}
