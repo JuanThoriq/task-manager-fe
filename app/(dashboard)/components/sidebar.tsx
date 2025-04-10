@@ -57,7 +57,7 @@ export const SidebarDashboard = () => {
   // ]
 
   return (
-    <aside className="hidden md:flex w-64 flex-col border-r border-gray-100 bg-white pt-16">
+    <aside className="hidden h-screen md:flex w-64 flex-col border-r border-gray-100 bg-white pt-16">
       <div className="flex flex-1 flex-col gap-2 p-4 overflow-auto">
         {/* <div className="mb-6">
           <Button className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 py-5">

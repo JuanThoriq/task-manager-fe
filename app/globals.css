@@ -6,6 +6,7 @@ body,
   --background: #ffffff;
   --foreground: #171717;
   height: 100%;
+  background-color: rgb(241 245 249);
 }
 
 @theme inline {

@@ -3,11 +3,11 @@ import { SidebarDashboard } from "./components/sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="h-full flex-col justify-center items-center bg-slate-100">
+    <section className="h-screen flex-col justify-center items-center bg-slate-100">
       <NavbarDashboard />
-      <section className="flex pt-14 bg-slate-100">
+      <section className="h-screen flex pt-14 bg-slate-100">
         <SidebarDashboard />
-        <main className="flex-1 p-4 h-screen">{children}</main>
+        <main className="flex-1 p-4 h-screen bg-slate-100">{children}</main>
       </section>
     </section>
   );
