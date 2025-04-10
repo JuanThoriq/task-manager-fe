@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
-import { ArrowRight, CheckCircle } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle } from "lucide-react";
 
 export default function LandingPage() {
   const fadeIn = {
@@ -13,7 +13,7 @@ export default function LandingPage() {
       y: 0,
       transition: { delay: custom * 0.1, duration: 0.5 },
     }),
-  }
+  };
 
   return (
     <section className="flex items-center justify-center flex-col px-4">
@@ -29,7 +29,9 @@ export default function LandingPage() {
           whileHover={{ scale: 1.03 }}
         >
           <CheckCircle className="h-4 w-4 text-violet-600" />
-          <span className="uppercase text-sm tracking-wide">No 1 task management</span>
+          <span className="uppercase text-sm tracking-wide">
+            No 1 task management
+          </span>
         </motion.div>
 
         <h1 className="text-3xl md:text-6xl text-center text-neutral-800 mb-4 font-bold leading-tight">
@@ -54,11 +56,18 @@ export default function LandingPage() {
         variants={fadeIn}
         custom={1}
       >
-        Collaborate, manage projects, and reach new productivity peaks. From high rises to the home office, the way your
-        team works is unique — accomplish it all with Taskify.
+        Collaborate, manage projects, and reach new productivity peaks. From
+        high rises to the home office, the way your team works is unique —
+        accomplish it all with Taskify.
       </motion.div>
 
-      <motion.div initial="hidden" animate="visible" variants={fadeIn} custom={2} className="mt-10">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        custom={2}
+        className="mt-10"
+      >
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
           <Button
             asChild
@@ -79,9 +88,18 @@ export default function LandingPage() {
         className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl"
       >
         {[
-          { title: "Organize", description: "Keep tasks in order, prioritize work" },
-          { title: "Collaborate", description: "Share and discuss with your team" },
-          { title: "Succeed", description: "Complete projects on time, every time" },
+          {
+            title: "Organize",
+            description: "Keep tasks in order, prioritize work",
+          },
+          {
+            title: "Collaborate",
+            description: "Share and discuss with your team",
+          },
+          {
+            title: "Succeed",
+            description: "Complete projects on time, every time",
+          },
         ].map((item, index) => (
           <motion.div
             key={index}
@@ -91,11 +109,13 @@ export default function LandingPage() {
             <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center mb-4">
               <span className="text-violet-600 font-bold">{index + 1}</span>
             </div>
-            <h3 className="text-lg font-bold text-neutral-800 mb-2">{item.title}</h3>
+            <h3 className="text-lg font-bold text-neutral-800 mb-2">
+              {item.title}
+            </h3>
             <p className="text-neutral-500">{item.description}</p>
           </motion.div>
         ))}
       </motion.div>
     </section>
-  )
+  );
 }

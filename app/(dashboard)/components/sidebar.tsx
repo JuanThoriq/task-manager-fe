@@ -8,14 +8,14 @@ import {
   LayoutDashboard,
   Calendar,
   Users,
-  Settings,
-  PlusCircle,
-  FolderKanban,
-  BarChart3,
-  HelpCircle,
+  // Settings,
+  // PlusCircle,
+  // FolderKanban,
+  // BarChart3,
+  // HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 
 export const SidebarDashboard = () => {
   const pathname = usePathname();
